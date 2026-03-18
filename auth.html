@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinguaFlow — Sign In</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   LinguaFlow — Design System v2.0
+   Aesthetic: Warm brutalist meets editorial — cream, ink, vivid accents
+   Fonts: Clash Display (headings) · Plus Jakarta Sans (body)
+═══════════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+/* ─── CSS VARIABLES ──────────────────────────────────────────────────────── */
+:root {
+  /* Dark theme (default) */
+  --bg:          #0e0f14;
+  --bg2:         #14151c;
+  --bg3:         #1a1c26;
+  --surface:     #1e2030;
+  --surface2:    #252840;
+  --border:      rgba(255,255,255,0.07);
+  --border2:     rgba(255,255,255,0.12);
+
+  --text:        #f4f4f8;
+  --text2:       #9a9db8;
+  --text3:       #4e5170;
+
+  /* Accent palette */
+  --lime:        #c8f135;
+  --lime-dim:    rgba(200,241,53,0.12);
+  --blue:        #5b8dee;
+  --blue-dim:    rgba(91,141,238,0.12);
+  --coral:       #ff6b6b;
+  --coral-dim:   rgba(255,107,107,0.12);
+  --amber:       #ffb84d;
+  --amber-dim:   rgba(255,184,77,0.12);
+  --mint:        #34d9a0;
+  --mint-dim:    rgba(52,217,160,0.12);
+  --violet:      #b06eff;
+  --violet-dim:  rgba(176,110,255,0.12);
+  --pink:        #ff5fa0;
+  --pink-dim:    rgba(255,95,160,0.12);
+
+  /* Semantic */
+  --success:     var(--mint);
+  --error:       var(--coral);
+  --warning:     var(--amber);
+  --primary:     var(--lime);
+  --primary-fg:  #0e0f14;
+
+  /* Layout */
+  --nav-h:       62px;
+  --sidebar-w:   240px;
+  --max-w:       1200px;
+  --radius-sm:   8px;
+  --radius:      14px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+
+  /* Shadows */
+  --shadow:      0 4px 24px rgba(0,0,0,0.4);
+  --shadow-lg:   0 12px 48px rgba(0,0,0,0.5);
+  --shadow-xl:   0 24px 80px rgba(0,0,0,0.6);
+  --glow-lime:   0 0 40px rgba(200,241,53,0.15);
+  --glow-blue:   0 0 40px rgba(91,141,238,0.2);
+
+  /* Easing */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="light"] {
+  --bg:      #f5f4f0;
+  --bg2:     #eeece6;
+  --bg3:     #e6e4dc;
+  --surface: #ffffff;
+  --surface2:#f0efe9;
+  --border:  rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.14);
+  --text:    #1a1a2e;
+  --text2:   #5a5a7a;
+  --text3:   #9a9ab0;
+  --shadow:  0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
+}
+
+/* ─── RESET ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+input, select, textarea { font-family: inherit; }
+img { max-width: 100%; display: block; }
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+
+/* ─── TYPOGRAPHY ─────────────────────────────────────────────────────────── */
+.display { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; }
+.heading-1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+.heading-2 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.01em; }
+.heading-3 { font-size: 1.1rem; font-weight: 700; }
+.label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); }
+.body-sm { font-size: 0.875rem; }
+.body-xs { font-size: 0.78rem; }
+
+/* ─── NAVBAR ─────────────────────────────────────────────────────────────── */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: var(--nav-h);
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0 1.5rem;
+  background: rgba(14,15,20,0.8);
+  backdrop-filter: blur(24px) saturate(160%);
+  border-bottom: 1px solid var(--border);
+}
+[data-theme="light"] .navbar { background: rgba(245,244,240,0.85); }
+
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 1.15rem; font-weight: 800; letter-spacing: -0.02em;
+  color: var(--text);
+  flex-shrink: 0;
+}
+.nav-logo .logo-icon {
+  width: 32px; height: 32px; border-radius: 10px;
+  background: var(--lime); display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; color: var(--primary-fg);
+}
+
+.nav-center { flex: 1; display: flex; align-items: center; justify-content: center; gap: 4px; }
+
+.nav-link {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: var(--radius-sm);
+  font-size: 0.875rem; font-weight: 600; color: var(--text2);
+  transition: all 0.15s;
+}
+.nav-link:hover { color: var(--text); background: var(--surface); }
+.nav-link.active { color: var(--lime); background: var(--lime-dim); }
+.nav-link .nl-icon { font-size: 1rem; }
+
+.nav-right { display: flex; align-items: center; gap: 0.75rem; margin-left: auto; }
+
+.nav-streak {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border-radius: 99px;
+  background: var(--amber-dim); border: 1px solid rgba(255,184,77,0.2);
+  font-size: 0.82rem; font-weight: 700; color: var(--amber);
+}
+.nav-xp {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border-radius: 99px;
+  background: var(--lime-dim); border: 1px solid rgba(200,241,53,0.2);
+  font-size: 0.82rem; font-weight: 700; color: var(--lime);
+}
+
+.nav-avatar {
+  width: 34px; height: 34px; border-radius: 99px;
+  background: linear-gradient(135deg, var(--violet), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.85rem; color: #fff;
+  cursor: pointer; border: 2px solid var(--border2); position: relative;
+}
+.nav-avatar-dropdown {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  min-width: 180px; background: var(--surface);
+  border: 1px solid var(--border2); border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); padding: 6px; z-index: 300;
+  display: none;
+}
+.nav-avatar:hover .nav-avatar-dropdown,
+.nav-avatar-dropdown:hover { display: block; }
+.nav-dd-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 12px; border-radius: var(--radius-sm);
+  font-size: 0.875rem; font-weight: 500; color: var(--text2);
+  transition: all 0.15s; cursor: pointer;
+}
+.nav-dd-item:hover { background: var(--bg3); color: var(--text); }
+.nav-dd-item.danger { color: var(--coral); }
+
+/* ─── PAGE WRAPPER ───────────────────────────────────────────────────────── */
+.page-wrapper { padding-top: var(--nav-h); min-height: 100vh; }
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem; }
+
+/* ─── BUTTONS ────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 11px 22px; border-radius: var(--radius-sm);
+  font-size: 0.9rem; font-weight: 700; border: none;
+  cursor: pointer; transition: all 0.18s var(--ease-smooth);
+  white-space: nowrap; text-decoration: none;
+  position: relative; overflow: hidden;
+}
+.btn::after {
+  content: ''; position: absolute; inset: 0;
+  background: white; opacity: 0; transition: opacity 0.15s;
+  border-radius: inherit;
+}
+.btn:active::after { opacity: 0.1; }
+
+.btn-primary {
+  background: var(--lime); color: var(--primary-fg);
+  box-shadow: 0 4px 16px rgba(200,241,53,0.3);
+}
+.btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,241,53,0.4); }
+
+.btn-secondary {
+  background: var(--surface2); color: var(--text);
+  border: 1px solid var(--border2);
+}
+.btn-secondary:hover { background: var(--surface); border-color: var(--border2); }
+
+.btn-ghost {
+  background: transparent; color: var(--text2);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { color: var(--text); background: var(--surface); border-color: var(--border2); }
+
+.btn-danger { background: var(--coral-dim); color: var(--coral); border: 1px solid rgba(255,107,107,0.2); }
+.btn-danger:hover { background: var(--coral); color: #fff; }
+
+.btn-lg { padding: 14px 28px; font-size: 1rem; border-radius: var(--radius); }
+.btn-sm { padding: 8px 16px; font-size: 0.82rem; }
+.btn-full { width: 100%; }
+.btn-icon { padding: 10px; border-radius: var(--radius-sm); }
+.btn:disabled { opacity: 0.4; pointer-events: none; }
+
+/* ─── CARDS ──────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 1.5rem;
+  transition: border-color 0.2s;
+}
+.card-hover:hover { border-color: var(--border2); }
+.card-interactive:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+/* ─── FORM ELEMENTS ──────────────────────────────────────────────────────── */
+.input-group { display: flex; flex-direction: column; gap: 6px; }
+.input-label { font-size: 0.82rem; font-weight: 600; color: var(--text2); }
+
+.input {
+  padding: 11px 14px; border-radius: var(--radius-sm);
+  background: var(--bg3); border: 1.5px solid var(--border2);
+  color: var(--text); font-size: 0.95rem;
+  transition: all 0.18s; outline: none;
+  width: 100%;
+}
+.input:focus { border-color: var(--lime); background: var(--bg2); box-shadow: 0 0 0 3px rgba(200,241,53,0.1); }
+.input::placeholder { color: var(--text3); }
+.input.error { border-color: var(--coral); }
+
+.select {
+  padding: 10px 14px; border-radius: var(--radius-sm);
+  background: var(--bg3); border: 1.5px solid var(--border2);
+  color: var(--text); font-size: 0.9rem; outline: none;
+  cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239a9db8' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  padding-right: 36px;
+}
+.select:focus { border-color: var(--lime); }
+
+/* ─── PROGRESS BAR ───────────────────────────────────────────────────────── */
+.progress-bar {
+  height: 8px; background: var(--bg3);
+  border-radius: 99px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, var(--lime), var(--mint));
+  transition: width 0.6s var(--ease-smooth);
+}
+.progress-fill.blue { background: linear-gradient(90deg, var(--blue), var(--violet)); }
+.progress-fill.coral { background: linear-gradient(90deg, var(--coral), var(--pink)); }
+
+/* ─── BADGE / PILL ───────────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 99px;
+  font-size: 0.72rem; font-weight: 700;
+}
+.badge-lime { background: var(--lime-dim); color: var(--lime); border: 1px solid rgba(200,241,53,0.2); }
+.badge-blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(91,141,238,0.2); }
+.badge-coral { background: var(--coral-dim); color: var(--coral); border: 1px solid rgba(255,107,107,0.2); }
+.badge-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(255,184,77,0.2); }
+.badge-mint { background: var(--mint-dim); color: var(--mint); border: 1px solid rgba(52,217,160,0.2); }
+.badge-violet { background: var(--violet-dim); color: var(--violet); border: 1px solid rgba(176,110,255,0.2); }
+
+/* ─── STAT CARD ──────────────────────────────────────────────────────────── */
+.stat-card {
+  padding: 1.25rem 1.5rem; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 4px;
+  position: relative; overflow: hidden;
+}
+.stat-card .sc-num {
+  font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text);
+}
+.stat-card .sc-label { font-size: 0.8rem; font-weight: 600; color: var(--text3); }
+.stat-card .sc-icon {
+  position: absolute; bottom: 1rem; right: 1rem;
+  font-size: 2rem; opacity: 0.15;
+}
+
+/* ─── TOAST SYSTEM ───────────────────────────────────────────────────────── */
+#toast-container {
+  position: fixed; bottom: 1.5rem; right: 1.5rem;
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: 9999; pointer-events: none;
+}
+.toast {
+  padding: 12px 18px; border-radius: var(--radius-sm);
+  font-size: 0.875rem; font-weight: 600;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  box-shadow: var(--shadow);
+  opacity: 0; transform: translateX(20px);
+  transition: all 0.3s var(--ease-smooth);
+  pointer-events: all;
+}
+.toast.show { opacity: 1; transform: translateX(0); }
+.toast-success { background: var(--mint-dim); border-color: rgba(52,217,160,0.3); color: var(--mint); }
+.toast-error { background: var(--coral-dim); border-color: rgba(255,107,107,0.3); color: var(--coral); }
+.toast-xp { background: var(--lime-dim); border-color: rgba(200,241,53,0.3); color: var(--lime); font-size: 1rem; }
+.toast-info { color: var(--text); }
+
+/* ─── MODAL ──────────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px); z-index: 500;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem; opacity: 0; animation: modal-in 0.25s var(--ease-smooth) forwards;
+}
+.modal {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: var(--radius-xl); padding: 2rem;
+  max-width: 480px; width: 100%;
+  box-shadow: var(--shadow-xl);
+  transform: scale(0.95) translateY(10px);
+  animation: modal-scale-in 0.3s var(--ease-bounce) forwards;
+}
+.modal-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.5rem; }
+.modal-subtitle { color: var(--text2); font-size: 0.9rem; margin-bottom: 1.5rem; }
+.modal-close {
+  position: absolute; top: 1rem; right: 1rem;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 10px; color: var(--text2);
+  cursor: pointer; font-size: 1rem;
+}
+
+@keyframes modal-in { to { opacity: 1; } }
+@keyframes modal-scale-in { to { transform: scale(1) translateY(0); } }
+
+/* ─── ACHIEVEMENT POPUP ──────────────────────────────────────────────────── */
+.achievement-popup {
+  position: fixed; top: calc(var(--nav-h) + 1rem); right: 1.5rem;
+  z-index: 1000; display: flex; flex-direction: column; gap: 8px;
+  pointer-events: none;
+}
+.ach-card {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; border-radius: var(--radius);
+  background: var(--surface2); border: 1px solid rgba(200,241,53,0.3);
+  box-shadow: var(--shadow-lg), var(--glow-lime);
+  opacity: 0; transform: translateX(20px);
+  animation: ach-in 0.4s var(--ease-bounce) forwards;
+}
+.ach-emoji { font-size: 2rem; }
+.ach-info { display: flex; flex-direction: column; gap: 2px; }
+.ach-title { font-size: 0.75rem; font-weight: 700; color: var(--lime); text-transform: uppercase; letter-spacing: 0.06em; }
+.ach-name { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+.ach-xp { font-size: 0.78rem; color: var(--text3); }
+
+@keyframes ach-in {
+  0% { opacity: 0; transform: translateX(20px); }
+  70% { transform: translateX(-4px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* ─── XP BURST ANIMATION ─────────────────────────────────────────────────── */
+.xp-burst {
+  position: fixed; pointer-events: none; z-index: 9999;
+  font-size: 1.2rem; font-weight: 800; color: var(--lime);
+  text-shadow: 0 0 20px rgba(200,241,53,0.8);
+  animation: xp-float 1.2s ease-out forwards;
+}
+@keyframes xp-float {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  60%  { opacity: 1; transform: translateY(-40px) scale(1.2); }
+  100% { opacity: 0; transform: translateY(-70px) scale(0.8); }
+}
+
+/* ─── STREAK FIRE ANIMATION ──────────────────────────────────────────────── */
+@keyframes flame {
+  0%,100% { transform: scale(1) rotate(-2deg); }
+  50%      { transform: scale(1.1) rotate(2deg); }
+}
+.streak-fire { animation: flame 1.5s ease-in-out infinite; display: inline-block; }
+
+/* ─── KEYBOARD SHORTCUT HINT ─────────────────────────────────────────────── */
+.kbd {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 22px; padding: 0 6px;
+  background: var(--bg3); border: 1px solid var(--border2); border-bottom-width: 2px;
+  border-radius: 4px; font-size: 0.72rem; font-weight: 700; color: var(--text3);
+}
+
+/* ─── LOADING SKELETON ───────────────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+/* ─── UTILITY CLASSES ────────────────────────────────────────────────────── */
+.flex   { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.gap-3 { gap: 1.5rem; }
+.gap-4 { gap: 2rem; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+.w-full { width: 100%; }
+.text-center { text-align: center; }
+.opacity-50 { opacity: 0.5; }
+.rounded-full { border-radius: 99px; }
+
+/* ─── EMPTY STATE ────────────────────────────────────────────────────────── */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 1rem; padding: 3rem 2rem; text-align: center;
+  color: var(--text3);
+}
+.empty-state .es-icon { font-size: 3rem; opacity: 0.5; }
+.empty-state h3 { font-size: 1rem; font-weight: 700; color: var(--text2); }
+.empty-state p { font-size: 0.875rem; max-width: 280px; }
+
+/* ─── FADE/SLIDE ANIMATIONS ──────────────────────────────────────────────── */
+@keyframes fade-up   { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+@keyframes fade-in   { from { opacity:0; } to { opacity:1; } }
+@keyframes slide-in-r{ from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:none; } }
+@keyframes scale-in  { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:none; } }
+@keyframes pop       { 0%{transform:scale(1)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
+@keyframes shake     { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+@keyframes spin      { to{transform:rotate(360deg)} }
+@keyframes pulse     { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+.animate-fade-up    { animation: fade-up 0.5s var(--ease-smooth) both; }
+.animate-fade-in    { animation: fade-in 0.3s ease both; }
+.animate-scale-in   { animation: scale-in 0.3s var(--ease-bounce) both; }
+.animate-slide-in-r { animation: slide-in-r 0.3s var(--ease-smooth) both; }
+[style*="--delay"] { animation-delay: var(--delay); }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  :root { --nav-h: 56px; --sidebar-w: 0px; }
+  .nav-center { display: none; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .container { padding: 0 1rem; }
+}
+
+</style>
+<style>
+.auth-root {
+  min-height: 100vh; display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+@media(max-width:768px){ .auth-root{grid-template-columns:1fr;} .auth-left{display:none;} }
+
+/* Left panel */
+.auth-left {
+  position: relative; overflow: hidden;
+  background: linear-gradient(145deg, #0a1628 0%, #0e1f3d 50%, #141c35 100%);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 4rem;
+}
+.auth-left-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(200,241,53,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(91,141,238,0.1) 0%, transparent 50%);
+}
+.auth-left-content { position: relative; z-index: 1; }
+.al-logo { display:flex; align-items:center; gap:12px; margin-bottom:3rem; }
+.al-logo-icon { width:44px;height:44px;border-radius:14px;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#0e0f14;font-weight:800; }
+.al-logo-text { font-size:1.3rem;font-weight:800;color:#fff;letter-spacing:-0.02em; }
+.al-headline { font-size:2.8rem;font-weight:800;line-height:1.1;color:#fff;letter-spacing:-0.03em;margin-bottom:1.25rem; }
+.al-headline span { color:var(--lime); }
+.al-sub { font-size:1.05rem;color:rgba(255,255,255,0.55);line-height:1.6;max-width:380px;margin-bottom:3rem; }
+.al-features { display:flex;flex-direction:column;gap:1rem; }
+.al-feat { display:flex;align-items:center;gap:14px; }
+.al-feat-icon { width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0; }
+.al-feat-text { font-size:0.9rem;color:rgba(255,255,255,0.7);font-weight:500; }
+.al-feat-text strong { color:#fff;display:block; }
+.al-langs { display:flex;flex-wrap:wrap;gap:8px;margin-top:3rem; }
+.al-lang { display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);font-size:0.82rem;color:rgba(255,255,255,0.7); }
+
+/* Right panel */
+.auth-right {
+  display: flex; align-items: center; justify-content: center;
+  padding: 3rem 2rem; background: var(--bg);
+}
+.auth-box {
+  width: 100%; max-width: 420px;
+}
+.auth-tabs { display:flex;background:var(--bg3);border-radius:var(--radius-sm);padding:4px;margin-bottom:2rem;gap:4px; }
+.auth-tab { flex:1;padding:9px;border-radius:calc(var(--radius-sm) - 2px);font-weight:700;font-size:0.9rem;color:var(--text2);background:none;border:none;transition:all 0.2s;cursor:pointer; }
+.auth-tab.active { background:var(--surface2);color:var(--text);box-shadow:var(--shadow); }
+.auth-form { display:flex;flex-direction:column;gap:1.25rem; }
+.auth-form.hidden { display:none; }
+.auth-divider { display:flex;align-items:center;gap:1rem;color:var(--text3);font-size:0.82rem; }
+.auth-divider::before,.auth-divider::after { content:'';flex:1;height:1px;background:var(--border); }
+.auth-error { padding:10px 14px;border-radius:var(--radius-sm);background:var(--coral-dim);border:1px solid rgba(255,107,107,0.3);color:var(--coral);font-size:0.875rem;display:none; }
+.lang-select-grid { display:grid;grid-template-columns:1fr 1fr;gap:0.75rem; }
+.lang-option { padding:10px 14px;border-radius:var(--radius-sm);background:var(--bg3);border:1.5px solid var(--border2);color:var(--text2);font-size:0.875rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.15s; }
+.lang-option:hover,.lang-option.selected { border-color:var(--lime);background:var(--lime-dim);color:var(--text); }
+.step-indicator { display:flex;align-items:center;gap:8px;margin-bottom:1.5rem; }
+.step-dot { width:8px;height:8px;border-radius:99px;background:var(--border2);transition:all 0.3s; }
+.step-dot.active { background:var(--lime);width:24px; }
+.step-dot.done { background:var(--mint); }
+</style>
+</head>
+<body>
+<div class="auth-root">
+  <!-- Left Panel -->
+  <div class="auth-left">
+    <div class="auth-left-bg"></div>
+    <div class="auth-left-content">
+      <div class="al-logo">
+        <div class="al-logo-icon">🌊</div>
+        <div class="al-logo-text">LinguaFlow</div>
+      </div>
+      <h1 class="al-headline">Learn languages<br>the <span>smart way</span></h1>
+      <p class="al-sub">Science-backed spaced repetition, gamified learning, and real progress tracking. Start for free today.</p>
+      <div class="al-features">
+        <div class="al-feat">
+          <div class="al-feat-icon">🧠</div>
+          <div class="al-feat-text"><strong>Spaced Repetition</strong>Learn at the optimal moment, every time</div>
+        </div>
+        <div class="al-feat">
+          <div class="al-feat-icon">🏆</div>
+          <div class="al-feat-text"><strong>Gamified Progress</strong>XP, streaks, levels, and achievements</div>
+        </div>
+        <div class="al-feat">
+          <div class="al-feat-icon">🌍</div>
+          <div class="al-feat-text"><strong>Multiple Languages</strong>Spanish, French, Hindi, and more</div>
+        </div>
+      </div>
+      <div class="al-langs">
+        <div class="al-lang">🇪🇸 Spanish</div>
+        <div class="al-lang">🇫🇷 French</div>
+        <div class="al-lang">🇮🇳 Hindi</div>
+        <div class="al-lang">🇩🇪 German</div>
+        <div class="al-lang">🇯🇵 Japanese</div>
+        <div class="al-lang">🇧🇷 Portuguese</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="auth-right">
+    <div class="auth-box">
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+        <button class="auth-tab" onclick="switchTab('signup')">Create Account</button>
+      </div>
+
+      <!-- Login Form -->
+      <div class="auth-form" id="loginForm">
+        <div class="input-group">
+          <label class="input-label">Email</label>
+          <input type="email" class="input" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Password</label>
+          <input type="password" class="input" id="loginPass" placeholder="••••••••">
+        </div>
+        <div class="auth-error" id="loginError"></div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="doLogin()">Sign In →</button>
+        <div class="auth-divider">or</div>
+        <button class="btn btn-secondary btn-full" onclick="doGuest()">👤 Continue as Guest</button>
+      </div>
+
+      <!-- Signup Form — multi-step -->
+      <div class="auth-form hidden" id="signupForm">
+        <div class="step-indicator">
+          <div class="step-dot active" id="sd1"></div>
+          <div class="step-dot" id="sd2"></div>
+          <div class="step-dot" id="sd3"></div>
+        </div>
+
+        <!-- Step 1: Account info -->
+        <div id="signupStep1">
+          <p class="label" style="margin-bottom:1.25rem">Step 1 of 3 — Account Details</p>
+          <div class="auth-form" style="gap:1.25rem">
+            <div class="input-group">
+              <label class="input-label">Full Name</label>
+              <input type="text" class="input" id="signupName" placeholder="Aaditya Kumar">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Email</label>
+              <input type="email" class="input" id="signupEmail" placeholder="you@example.com">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Password</label>
+              <input type="password" class="input" id="signupPass" placeholder="Min. 6 characters">
+            </div>
+          </div>
+          <div class="auth-error mt-2" id="signupError"></div>
+          <button class="btn btn-primary btn-full mt-3" onclick="signupStep2()">Next →</button>
+        </div>
+
+        <!-- Step 2: Language selection -->
+        <div id="signupStep2" style="display:none">
+          <p class="label" style="margin-bottom:0.5rem">Step 2 of 3</p>
+          <p class="heading-3" style="margin-bottom:0.25rem">What's your native language?</p>
+          <p class="body-sm" style="color:var(--text2);margin-bottom:1.25rem">We'll use this to explain things</p>
+          <div class="lang-select-grid" id="nativeLangGrid"></div>
+          <p class="heading-3" style="margin:1.5rem 0 0.25rem">I want to learn...</p>
+          <p class="body-sm" style="color:var(--text2);margin-bottom:1.25rem">Pick your target language</p>
+          <div class="lang-select-grid" id="learningLangGrid"></div>
+          <button class="btn btn-primary btn-full mt-3" onclick="signupStep3()">Next →</button>
+        </div>
+
+        <!-- Step 3: Daily goal -->
+        <div id="signupStep3" style="display:none">
+          <p class="label" style="margin-bottom:0.5rem">Step 3 of 3</p>
+          <p class="heading-3" style="margin-bottom:0.25rem">Set your daily goal</p>
+          <p class="body-sm" style="color:var(--text2);margin-bottom:1.5rem">How many words per day?</p>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem" id="goalGrid">
+            <button class="lang-option" data-goal="5" onclick="selectGoal(this)">⚡ 5 words<br><span style="font-size:0.75rem;color:var(--text3)">5 min/day</span></button>
+            <button class="lang-option selected" data-goal="10" onclick="selectGoal(this)">🎯 10 words<br><span style="font-size:0.75rem;color:var(--text3)">10 min/day</span></button>
+            <button class="lang-option" data-goal="20" onclick="selectGoal(this)">🚀 20 words<br><span style="font-size:0.75rem;color:var(--text3)">20 min/day</span></button>
+            <button class="lang-option" data-goal="30" onclick="selectGoal(this)">🏆 30 words<br><span style="font-size:0.75rem;color:var(--text3)">30 min/day</span></button>
+          </div>
+          <button class="btn btn-primary btn-full btn-lg mt-3" onclick="doSignup()" id="signupBtn">🚀 Start Learning!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   LinguaFlow — Core Engine  v2.0
+   Modules: Store · Auth · Languages · Vocab · SRS · Gamification · Achievements
+═══════════════════════════════════════════════════════════════════════════ */
+
+'use strict';
+
+/* ─── STORE ─────────────────────────────────────────────────────────────── */
+const Store = {
+  get: (key, fallback = null) => {
+    try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : fallback; }
+    catch { return fallback; }
+  },
+  set: (key, val) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} },
+  del: (key) => localStorage.removeItem(key),
+  clear: () => localStorage.clear(),
+};
+
+/* ─── AUTH ──────────────────────────────────────────────────────────────── */
+const Auth = {
+  signup(name, email, password) {
+    const users = Store.get('lf_users', {});
+    if (users[email]) return { ok: false, error: 'Email already registered.' };
+    const user = {
+      id: 'u_' + Date.now(),
+      name, email,
+      passwordHash: btoa(password), // demo only — never do this in prod
+      createdAt: Date.now(),
+      settings: { nativeLang: 'en', learningLang: 'es', theme: 'dark', dailyGoal: 10 },
+    };
+    users[email] = user;
+    Store.set('lf_users', users);
+    Store.set('lf_session', email);
+    return { ok: true, user };
+  },
+
+  login(email, password) {
+    const users = Store.get('lf_users', {});
+    const user = users[email];
+    if (!user) return { ok: false, error: 'No account found.' };
+    if (user.passwordHash !== btoa(password)) return { ok: false, error: 'Wrong password.' };
+    Store.set('lf_session', email);
+    return { ok: true, user };
+  },
+
+  logout() { Store.del('lf_session'); },
+
+  current() {
+    const email = Store.get('lf_session');
+    if (!email) return null;
+    const users = Store.get('lf_users', {});
+    return users[email] || null;
+  },
+
+  update(changes) {
+    const email = Store.get('lf_session');
+    const users = Store.get('lf_users', {});
+    if (!users[email]) return;
+    Object.assign(users[email], changes);
+    Store.set('lf_users', users);
+  },
+
+  updateSettings(changes) {
+    const user = this.current();
+    if (!user) return;
+    const users = Store.get('lf_users', {});
+    users[user.email].settings = { ...users[user.email].settings, ...changes };
+    Store.set('lf_users', users);
+  },
+
+  // Demo guest login
+  guest() {
+    const guest = {
+      id: 'guest', name: 'Guest', email: 'guest@demo.com',
+      passwordHash: '', createdAt: Date.now(),
+      settings: { nativeLang: 'en', learningLang: 'es', theme: 'dark', dailyGoal: 10 },
+    };
+    const users = Store.get('lf_users', {});
+    users['guest@demo.com'] = guest;
+    Store.set('lf_users', users);
+    Store.set('lf_session', 'guest@demo.com');
+    return { ok: true, user: guest };
+  },
+};
+
+/* ─── LANGUAGES ─────────────────────────────────────────────────────────── */
+const LANGUAGES = {
+  en: { name: 'English',    flag: '🇬🇧', code: 'en' },
+  es: { name: 'Spanish',    flag: '🇪🇸', code: 'es' },
+  fr: { name: 'French',     flag: '🇫🇷', code: 'fr' },
+  de: { name: 'German',     flag: '🇩🇪', code: 'de' },
+  hi: { name: 'Hindi',      flag: '🇮🇳', code: 'hi' },
+  ja: { name: 'Japanese',   flag: '🇯🇵', code: 'ja' },
+  zh: { name: 'Chinese',    flag: '🇨🇳', code: 'zh' },
+  pt: { name: 'Portuguese', flag: '🇧🇷', code: 'pt' },
+};
+
+/* ─── VOCABULARY DATABASE ───────────────────────────────────────────────── */
+// Schema: { id, word, translations:{lang:str}, pronunciation, example:{en,es,...},
+//           synonyms, antonyms, category, difficulty, emoji, tags }
+const VOCAB_DB = {
+  es: [
+    // Greetings
+    { id:'es_001', word:'Hello', translations:{es:'Hola',fr:'Bonjour',de:'Hallo',hi:'नमस्ते',pt:'Olá'}, pronunciation:'OH-lah', example:{en:'Hello, how are you?',es:'Hola, ¿cómo estás?'}, synonyms:['Saludo'], antonyms:['Adiós'], category:'Greetings', difficulty:1, emoji:'👋', tags:['basic','social'] },
+    { id:'es_002', word:'Good morning', translations:{es:'Buenos días',fr:'Bonjour',de:'Guten Morgen',hi:'सुप्रभात',pt:'Bom dia'}, pronunciation:'BWAY-nos DEE-as', example:{en:'Good morning, sir.',es:'Buenos días, señor.'}, synonyms:[], antonyms:['Buenas noches'], category:'Greetings', difficulty:1, emoji:'🌅', tags:['basic','time'] },
+    { id:'es_003', word:'Good night', translations:{es:'Buenas noches',fr:'Bonne nuit',de:'Gute Nacht',hi:'शुभ रात्रि',pt:'Boa noite'}, pronunciation:'BWAY-nas NOH-chays', example:{en:'Good night, sleep well.',es:'Buenas noches, duerme bien.'}, synonyms:[], antonyms:['Buenos días'], category:'Greetings', difficulty:1, emoji:'🌙', tags:['basic','time'] },
+    { id:'es_004', word:'Goodbye', translations:{es:'Adiós',fr:'Au revoir',de:'Auf Wiedersehen',hi:'अलविदा',pt:'Adeus'}, pronunciation:'ah-DYOS', example:{en:'Goodbye, see you tomorrow.',es:'Adiós, nos vemos mañana.'}, synonyms:['Hasta luego'], antonyms:['Hola'], category:'Greetings', difficulty:1, emoji:'👋', tags:['basic','social'] },
+    { id:'es_005', word:'How are you?', translations:{es:'¿Cómo estás?',fr:'Comment allez-vous?',de:'Wie geht es Ihnen?',hi:'आप कैसे हैं?',pt:'Como vai você?'}, pronunciation:'KOH-moh eh-STAHS', example:{en:'Hi! How are you today?',es:'¡Hola! ¿Cómo estás hoy?'}, synonyms:[], antonyms:[], category:'Greetings', difficulty:2, emoji:'😊', tags:['social','question'] },
+    { id:'es_006', word:'Nice to meet you', translations:{es:'Mucho gusto',fr:'Enchanté',de:'Schön Sie kennenzulernen',hi:'आपसे मिलकर खुशी हुई',pt:'Prazer em conhecê-lo'}, pronunciation:'MOO-choh GOOS-toh', example:{en:'Nice to meet you, I\'m Ana.',es:'Mucho gusto, soy Ana.'}, synonyms:[], antonyms:[], category:'Greetings', difficulty:2, emoji:'🤝', tags:['social','formal'] },
+
+    // Essentials
+    { id:'es_007', word:'Thank you', translations:{es:'Gracias',fr:'Merci',de:'Danke',hi:'धन्यवाद',pt:'Obrigado'}, pronunciation:'GRAH-syahs', example:{en:'Thank you very much!',es:'¡Muchas gracias!'}, synonyms:[], antonyms:['De nada'], category:'Essentials', difficulty:1, emoji:'🙏', tags:['basic','polite'] },
+    { id:'es_008', word:'Please', translations:{es:'Por favor',fr:'S\'il vous plaît',de:'Bitte',hi:'कृपया',pt:'Por favor'}, pronunciation:'por fah-VOR', example:{en:'Can I have water, please?',es:'¿Me da agua, por favor?'}, synonyms:[], antonyms:[], category:'Essentials', difficulty:1, emoji:'✨', tags:['basic','polite'] },
+    { id:'es_009', word:'Sorry', translations:{es:'Lo siento',fr:'Désolé',de:'Entschuldigung',hi:'माफ़ कीजिए',pt:'Desculpe'}, pronunciation:'loh SYEN-toh', example:{en:'I\'m sorry for being late.',es:'Lo siento por llegar tarde.'}, synonyms:['Perdón','Disculpa'], antonyms:[], category:'Essentials', difficulty:1, emoji:'😔', tags:['basic','polite'] },
+    { id:'es_010', word:'Yes', translations:{es:'Sí',fr:'Oui',de:'Ja',hi:'हाँ',pt:'Sim'}, pronunciation:'SEE', example:{en:'Yes, I understand.',es:'Sí, entiendo.'}, synonyms:[], antonyms:['No'], category:'Essentials', difficulty:1, emoji:'✅', tags:['basic'] },
+    { id:'es_011', word:'No', translations:{es:'No',fr:'Non',de:'Nein',hi:'नहीं',pt:'Não'}, pronunciation:'NOH', example:{en:'No, thank you.',es:'No, gracias.'}, synonyms:[], antonyms:['Sí'], category:'Essentials', difficulty:1, emoji:'❌', tags:['basic'] },
+    { id:'es_012', word:'I don\'t understand', translations:{es:'No entiendo',fr:'Je ne comprends pas',de:'Ich verstehe nicht',hi:'मुझे समझ नहीं आया',pt:'Não entendo'}, pronunciation:'noh en-TYEN-doh', example:{en:'Sorry, I don\'t understand.',es:'Lo siento, no entiendo.'}, synonyms:[], antonyms:[], category:'Essentials', difficulty:2, emoji:'🤷', tags:['communication'] },
+    { id:'es_013', word:'Help', translations:{es:'Ayuda',fr:'Aide',de:'Hilfe',hi:'मदद',pt:'Ajuda'}, pronunciation:'ah-YOO-dah', example:{en:'I need help, please.',es:'Necesito ayuda, por favor.'}, synonyms:['Auxilio','Socorro'], antonyms:[], category:'Essentials', difficulty:1, emoji:'🆘', tags:['emergency','basic'] },
+
+    // Food & Drink
+    { id:'es_014', word:'Water', translations:{es:'Agua',fr:'Eau',de:'Wasser',hi:'पानी',pt:'Água'}, pronunciation:'AH-gwah', example:{en:'A glass of water, please.',es:'Un vaso de agua, por favor.'}, synonyms:[], antonyms:[], category:'Food', difficulty:1, emoji:'💧', tags:['drinks','restaurant'] },
+    { id:'es_015', word:'Food', translations:{es:'Comida',fr:'Nourriture',de:'Essen',hi:'खाना',pt:'Comida'}, pronunciation:'koh-MEE-dah', example:{en:'The food here is delicious.',es:'La comida aquí es deliciosa.'}, synonyms:['Alimento'], antonyms:[], category:'Food', difficulty:1, emoji:'🍽️', tags:['restaurant','daily'] },
+    { id:'es_016', word:'Coffee', translations:{es:'Café',fr:'Café',de:'Kaffee',hi:'कॉफ़ी',pt:'Café'}, pronunciation:'kah-FEH', example:{en:'I would like a coffee.',es:'Quisiera un café.'}, synonyms:[], antonyms:[], category:'Food', difficulty:1, emoji:'☕', tags:['drinks','restaurant'] },
+    { id:'es_017', word:'Bread', translations:{es:'Pan',fr:'Pain',de:'Brot',hi:'रोटी',pt:'Pão'}, pronunciation:'PAN', example:{en:'Fresh bread every morning.',es:'Pan fresco cada mañana.'}, synonyms:[], antonyms:[], category:'Food', difficulty:1, emoji:'🍞', tags:['food','bakery'] },
+    { id:'es_018', word:'Wine', translations:{es:'Vino',fr:'Vin',de:'Wein',hi:'शराब',pt:'Vinho'}, pronunciation:'BEE-noh', example:{en:'A glass of red wine.',es:'Una copa de vino tinto.'}, synonyms:[], antonyms:[], category:'Food', difficulty:1, emoji:'🍷', tags:['drinks','restaurant'] },
+    { id:'es_019', word:'The bill please', translations:{es:'La cuenta, por favor',fr:'L\'addition, s\'il vous plaît',de:'Die Rechnung, bitte',hi:'बिल लाइए',pt:'A conta, por favor'}, pronunciation:'lah KWEN-tah por fah-VOR', example:{en:'Waiter, the bill please.',es:'Mesero, la cuenta por favor.'}, synonyms:[], antonyms:[], category:'Food', difficulty:3, emoji:'🧾', tags:['restaurant','formal'] },
+    { id:'es_020', word:'Delicious', translations:{es:'Delicioso',fr:'Délicieux',de:'Köstlich',hi:'स्वादिष्ट',pt:'Delicioso'}, pronunciation:'deh-lee-SYOH-soh', example:{en:'This is very delicious!',es:'¡Esto está muy delicioso!'}, synonyms:['Rico','Sabroso'], antonyms:['Horrible'], category:'Food', difficulty:2, emoji:'😋', tags:['adjective','food'] },
+
+    // Numbers
+    { id:'es_021', word:'One', translations:{es:'Uno',fr:'Un',de:'Eins',hi:'एक',pt:'Um'}, pronunciation:'OO-noh', example:{en:'I have one dog.',es:'Tengo un perro.'}, synonyms:[], antonyms:[], category:'Numbers', difficulty:1, emoji:'1️⃣', tags:['numbers','basic'] },
+    { id:'es_022', word:'Two', translations:{es:'Dos',fr:'Deux',de:'Zwei',hi:'दो',pt:'Dois'}, pronunciation:'DOHS', example:{en:'Two tickets, please.',es:'Dos boletos, por favor.'}, synonyms:[], antonyms:[], category:'Numbers', difficulty:1, emoji:'2️⃣', tags:['numbers','basic'] },
+    { id:'es_023', word:'Three', translations:{es:'Tres',fr:'Trois',de:'Drei',hi:'तीन',pt:'Três'}, pronunciation:'TREHS', example:{en:'Three days from now.',es:'Tres días a partir de ahora.'}, synonyms:[], antonyms:[], category:'Numbers', difficulty:1, emoji:'3️⃣', tags:['numbers','basic'] },
+    { id:'es_024', word:'Ten', translations:{es:'Diez',fr:'Dix',de:'Zehn',hi:'दस',pt:'Dez'}, pronunciation:'DYEHS', example:{en:'Ten minutes later.',es:'Diez minutos después.'}, synonyms:[], antonyms:[], category:'Numbers', difficulty:1, emoji:'🔟', tags:['numbers','basic'] },
+    { id:'es_025', word:'One hundred', translations:{es:'Cien',fr:'Cent',de:'Hundert',hi:'सौ',pt:'Cem'}, pronunciation:'SYEN', example:{en:'One hundred people attended.',es:'Asistieron cien personas.'}, synonyms:[], antonyms:[], category:'Numbers', difficulty:2, emoji:'💯', tags:['numbers','intermediate'] },
+
+    // Travel
+    { id:'es_026', word:'Where is…?', translations:{es:'¿Dónde está…?',fr:'Où est…?',de:'Wo ist…?',hi:'…कहाँ है?',pt:'Onde fica…?'}, pronunciation:'DON-deh eh-STAH', example:{en:'Where is the bathroom?',es:'¿Dónde está el baño?'}, synonyms:[], antonyms:[], category:'Travel', difficulty:2, emoji:'📍', tags:['question','navigation'] },
+    { id:'es_027', word:'Hotel', translations:{es:'Hotel',fr:'Hôtel',de:'Hotel',hi:'होटल',pt:'Hotel'}, pronunciation:'oh-TEL', example:{en:'I\'m staying at a hotel.',es:'Estoy en un hotel.'}, synonyms:['Hostal','Pensión'], antonyms:[], category:'Travel', difficulty:1, emoji:'🏨', tags:['accommodation','travel'] },
+    { id:'es_028', word:'Airport', translations:{es:'Aeropuerto',fr:'Aéroport',de:'Flughafen',hi:'हवाई अड्डा',pt:'Aeroporto'}, pronunciation:'ah-eh-roh-PWER-toh', example:{en:'Take me to the airport.',es:'Llévame al aeropuerto.'}, synonyms:[], antonyms:[], category:'Travel', difficulty:2, emoji:'✈️', tags:['transport','travel'] },
+    { id:'es_029', word:'Train', translations:{es:'Tren',fr:'Train',de:'Zug',hi:'ट्रेन',pt:'Trem'}, pronunciation:'TREN', example:{en:'The train to Madrid leaves at 9.',es:'El tren a Madrid sale a las 9.'}, synonyms:[], antonyms:[], category:'Travel', difficulty:1, emoji:'🚆', tags:['transport','travel'] },
+    { id:'es_030', word:'Left', translations:{es:'Izquierda',fr:'Gauche',de:'Links',hi:'बाएं',pt:'Esquerda'}, pronunciation:'ees-KYER-dah', example:{en:'Turn left at the corner.',es:'Gira a la izquierda en la esquina.'}, synonyms:[], antonyms:['Derecha'], category:'Travel', difficulty:2, emoji:'⬅️', tags:['navigation','direction'] },
+    { id:'es_031', word:'Right', translations:{es:'Derecha',fr:'Droite',de:'Rechts',hi:'दाएं',pt:'Direita'}, pronunciation:'deh-REH-chah', example:{en:'The shop is on the right.',es:'La tienda está a la derecha.'}, synonyms:[], antonyms:['Izquierda'], category:'Travel', difficulty:2, emoji:'➡️', tags:['navigation','direction'] },
+
+    // Business
+    { id:'es_032', word:'Meeting', translations:{es:'Reunión',fr:'Réunion',de:'Besprechung',hi:'बैठक',pt:'Reunião'}, pronunciation:'reh-OO-nyon', example:{en:'The meeting starts at 10am.',es:'La reunión empieza a las 10.'}, synonyms:['Junta','Sesión'], antonyms:[], category:'Business', difficulty:2, emoji:'💼', tags:['work','formal'] },
+    { id:'es_033', word:'Contract', translations:{es:'Contrato',fr:'Contrat',de:'Vertrag',hi:'अनुबंध',pt:'Contrato'}, pronunciation:'kon-TRAH-toh', example:{en:'Please sign the contract.',es:'Por favor firma el contrato.'}, synonyms:['Acuerdo'], antonyms:[], category:'Business', difficulty:3, emoji:'📋', tags:['work','legal'] },
+    { id:'es_034', word:'Price', translations:{es:'Precio',fr:'Prix',de:'Preis',hi:'कीमत',pt:'Preço'}, pronunciation:'PREH-syoh', example:{en:'What is the price?',es:'¿Cuál es el precio?'}, synonyms:['Costo','Valor'], antonyms:[], category:'Business', difficulty:2, emoji:'💰', tags:['shopping','commerce'] },
+    { id:'es_035', word:'Discount', translations:{es:'Descuento',fr:'Remise',de:'Rabatt',hi:'छूट',pt:'Desconto'}, pronunciation:'des-KWEN-toh', example:{en:'Is there a discount available?',es:'¿Hay algún descuento disponible?'}, synonyms:['Rebaja'], antonyms:[], category:'Business', difficulty:2, emoji:'🏷️', tags:['shopping','commerce'] },
+
+    // Daily Life
+    { id:'es_036', word:'Home', translations:{es:'Casa',fr:'Maison',de:'Haus',hi:'घर',pt:'Casa'}, pronunciation:'KAH-sah', example:{en:'I am going home.',es:'Me voy a casa.'}, synonyms:['Hogar'], antonyms:[], category:'Daily Life', difficulty:1, emoji:'🏠', tags:['places','basic'] },
+    { id:'es_037', word:'Work', translations:{es:'Trabajo',fr:'Travail',de:'Arbeit',hi:'काम',pt:'Trabalho'}, pronunciation:'trah-BAH-hoh', example:{en:'I have a lot of work today.',es:'Tengo mucho trabajo hoy.'}, synonyms:['Empleo'], antonyms:['Descanso'], category:'Daily Life', difficulty:1, emoji:'💪', tags:['career','daily'] },
+    { id:'es_038', word:'Family', translations:{es:'Familia',fr:'Famille',de:'Familie',hi:'परिवार',pt:'Família'}, pronunciation:'fah-MEE-lyah', example:{en:'I love my family.',es:'Amo a mi familia.'}, synonyms:[], antonyms:[], category:'Daily Life', difficulty:1, emoji:'👨‍👩‍👧‍👦', tags:['people','social'] },
+    { id:'es_039', word:'Friend', translations:{es:'Amigo',fr:'Ami',de:'Freund',hi:'दोस्त',pt:'Amigo'}, pronunciation:'ah-MEE-goh', example:{en:'He is my best friend.',es:'Él es mi mejor amigo.'}, synonyms:['Compañero'], antonyms:['Enemigo'], category:'Daily Life', difficulty:1, emoji:'🤝', tags:['people','social'] },
+    { id:'es_040', word:'Beautiful', translations:{es:'Hermoso',fr:'Beau',de:'Schön',hi:'सुंदर',pt:'Bonito'}, pronunciation:'er-MOH-soh', example:{en:'What a beautiful day!',es:'¡Qué día tan hermoso!'}, synonyms:['Bonito','Lindo'], antonyms:['Feo'], category:'Daily Life', difficulty:2, emoji:'✨', tags:['adjective','emotion'] },
+  ],
+
+  // French mini-pack
+  fr: [
+    { id:'fr_001', word:'Hello', translations:{fr:'Bonjour',es:'Hola',de:'Hallo',hi:'नमस्ते'}, pronunciation:'BON-zhoor', example:{en:'Hello everyone!',fr:'Bonjour tout le monde!'}, synonyms:['Salut'], antonyms:[], category:'Greetings', difficulty:1, emoji:'👋', tags:['basic'] },
+    { id:'fr_002', word:'Thank you', translations:{fr:'Merci',es:'Gracias',de:'Danke',hi:'धन्यवाद'}, pronunciation:'mer-SEE', example:{en:'Thank you very much.',fr:'Merci beaucoup.'}, synonyms:[], antonyms:[], category:'Essentials', difficulty:1, emoji:'🙏', tags:['polite'] },
+    { id:'fr_003', word:'Water', translations:{fr:'Eau',es:'Agua',de:'Wasser',hi:'पानी'}, pronunciation:'OH', example:{en:'A glass of water.',fr:'Un verre d\'eau.'}, synonyms:[], antonyms:[], category:'Food', difficulty:1, emoji:'💧', tags:['drinks'] },
+    { id:'fr_004', word:'Goodbye', translations:{fr:'Au revoir',es:'Adiós',de:'Auf Wiedersehen',hi:'अलविदा'}, pronunciation:'oh ruh-VWAR', example:{en:'Goodbye, see you later.',fr:'Au revoir, à bientôt.'}, synonyms:['Adieu'], antonyms:[], category:'Greetings', difficulty:1, emoji:'👋', tags:['basic'] },
+    { id:'fr_005', word:'Beautiful', translations:{fr:'Beau',es:'Hermoso',de:'Schön',hi:'सुंदर'}, pronunciation:'BOH', example:{en:'The city is beautiful.',fr:'La ville est belle.'}, synonyms:['Joli'], antonyms:['Laid'], category:'Daily Life', difficulty:2, emoji:'✨', tags:['adjective'] },
+    { id:'fr_006', word:'Please', translations:{fr:'S\'il vous plaît',es:'Por favor',de:'Bitte',hi:'कृपया'}, pronunciation:'seel voo PLEH', example:{en:'Please help me.',fr:'Aidez-moi, s\'il vous plaît.'}, synonyms:[], antonyms:[], category:'Essentials', difficulty:2, emoji:'🙏', tags:['polite'] },
+    { id:'fr_007', word:'Where is?', translations:{fr:'Où est?',es:'¿Dónde está?',de:'Wo ist?',hi:'कहाँ है?'}, pronunciation:'OO eh', example:{en:'Where is the museum?',fr:'Où est le musée?'}, synonyms:[], antonyms:[], category:'Travel', difficulty:2, emoji:'📍', tags:['question'] },
+    { id:'fr_008', word:'Hotel', translations:{fr:'Hôtel',es:'Hotel',de:'Hotel',hi:'होटल'}, pronunciation:'oh-TEL', example:{en:'I need a hotel room.',fr:'J\'ai besoin d\'une chambre d\'hôtel.'}, synonyms:[], antonyms:[], category:'Travel', difficulty:1, emoji:'🏨', tags:['accommodation'] },
+  ],
+
+  // Hindi mini-pack
+  hi: [
+    { id:'hi_001', word:'Hello', translations:{hi:'नमस्ते',es:'Hola',fr:'Bonjour'}, pronunciation:'nah-mas-TEH', example:{en:'Hello, welcome.',hi:'नमस्ते, स्वागत है।'}, synonyms:[], antonyms:[], category:'Greetings', difficulty:1, emoji:'🙏', tags:['basic'] },
+    { id:'hi_002', word:'Thank you', translations:{hi:'धन्यवाद',es:'Gracias',fr:'Merci'}, pronunciation:'dhun-yuh-VAHD', example:{en:'Thank you for helping.',hi:'मदद के लिए धन्यवाद।'}, synonyms:['शुक्रिया'], antonyms:[], category:'Essentials', difficulty:1, emoji:'🙏', tags:['polite'] },
+    { id:'hi_003', word:'Water', translations:{hi:'पानी',es:'Agua',fr:'Eau'}, pronunciation:'pah-NEE', example:{en:'Please give me water.',hi:'मुझे पानी दीजिए।'}, synonyms:['जल'], antonyms:[], category:'Food', difficulty:1, emoji:'💧', tags:['drinks'] },
+    { id:'hi_004', word:'Food', translations:{hi:'खाना',es:'Comida',fr:'Nourriture'}, pronunciation:'KAH-nah', example:{en:'The food is ready.',hi:'खाना तैयार है।'}, synonyms:['भोजन'], antonyms:[], category:'Food', difficulty:1, emoji:'🍽️', tags:['daily'] },
+    { id:'hi_005', word:'Yes', translations:{hi:'हाँ',es:'Sí',fr:'Oui'}, pronunciation:'HAAH', example:{en:'Yes, I agree.',hi:'हाँ, मैं सहमत हूँ।'}, synonyms:[], antonyms:['नहीं'], category:'Essentials', difficulty:1, emoji:'✅', tags:['basic'] },
+    { id:'hi_006', word:'No', translations:{hi:'नहीं',es:'No',fr:'Non'}, pronunciation:'nah-HEEN', example:{en:'No, I don\'t want this.',hi:'नहीं, मुझे यह नहीं चाहिए।'}, synonyms:[], antonyms:['हाँ'], category:'Essentials', difficulty:1, emoji:'❌', tags:['basic'] },
+    { id:'hi_007', word:'Good morning', translations:{hi:'सुप्रभात',es:'Buenos días',fr:'Bonjour'}, pronunciation:'soo-pra-BHAHT', example:{en:'Good morning, friends.',hi:'सुप्रभात, दोस्तों।'}, synonyms:[], antonyms:[], category:'Greetings', difficulty:1, emoji:'🌅', tags:['basic','time'] },
+    { id:'hi_008', word:'Beautiful', translations:{hi:'सुंदर',es:'Hermoso',fr:'Beau'}, pronunciation:'SUN-dar', example:{en:'How beautiful this is!',hi:'यह कितना सुंदर है!'}, synonyms:['खूबसूरत'], antonyms:['बदसूरत'], category:'Daily Life', difficulty:2, emoji:'✨', tags:['adjective'] },
+  ],
+};
+
+const CATEGORIES_META = {
+  Greetings:  { emoji:'👋', color:'#4a9eff', desc:'First words to know' },
+  Essentials: { emoji:'✨', color:'#a78bfa', desc:'Must-know phrases' },
+  Food:       { emoji:'🍽️', color:'#ff8c42', desc:'Eat & drink' },
+  Numbers:    { emoji:'🔢', color:'#3dd68c', desc:'Count & measure' },
+  Travel:     { emoji:'✈️', color:'#ffd60a', desc:'Get around' },
+  Business:   { emoji:'💼', color:'#f472b6', desc:'Work & commerce' },
+  'Daily Life':{ emoji:'🏠', color:'#34d399', desc:'Everyday living' },
+};
+
+/* ─── VOCABULARY ENGINE ─────────────────────────────────────────────────── */
+const Vocab = {
+  getAll(lang = 'es') {
+    return VOCAB_DB[lang] || VOCAB_DB['es'];
+  },
+
+  getByCategory(lang, cat) {
+    return this.getAll(lang).filter(v => v.category === cat);
+  },
+
+  getByDifficulty(lang, level) {
+    return this.getAll(lang).filter(v => v.difficulty === level);
+  },
+
+  getCategories(lang) {
+    const cats = [...new Set(this.getAll(lang).map(v => v.category))];
+    return cats.map(c => ({ name: c, ...(CATEGORIES_META[c] || { emoji:'📚', color:'#888' }) }));
+  },
+
+  getTranslation(word, targetLang) {
+    return word.translations?.[targetLang] || word.translations?.es || '—';
+  },
+
+  search(lang, query) {
+    const q = query.toLowerCase();
+    return this.getAll(lang).filter(v =>
+      v.word.toLowerCase().includes(q) ||
+      Object.values(v.translations).some(t => t.toLowerCase().includes(q))
+    );
+  },
+};
+
+/* ─── SRS ENGINE (SM-2) ─────────────────────────────────────────────────── */
+const SRS = {
+  _key(userId, wordId) { return `srs_${userId}_${wordId}`; },
+
+  getCard(userId, wordId) {
+    return Store.get(this._key(userId, wordId), {
+      wordId, interval: 0, repetitions: 0,
+      easeFactor: 2.5, nextReview: 0, lastQuality: null, totalReviews: 0,
+    });
+  },
+
+  review(userId, wordId, quality) { // quality 1-5
+    let c = this.getCard(userId, wordId);
+    c.totalReviews++;
+    if (quality >= 3) {
+      if      (c.repetitions === 0) c.interval = 1;
+      else if (c.repetitions === 1) c.interval = 6;
+      else    c.interval = Math.round(c.interval * c.easeFactor);
+      c.repetitions++;
+    } else {
+      c.repetitions = 0;
+      c.interval = 1;
+    }
+    c.easeFactor = Math.max(1.3,
+      c.easeFactor + 0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)
+    );
+    c.nextReview = Date.now() + c.interval * 86400000;
+    c.lastQuality = quality;
+    Store.set(this._key(userId, wordId), c);
+    return c;
+  },
+
+  getDue(userId, lang) {
+    return Vocab.getAll(lang).filter(v => {
+      const c = this.getCard(userId, v.id);
+      return c.nextReview <= Date.now();
+    });
+  },
+
+  getMastery(userId, wordId) {
+    const c = this.getCard(userId, wordId);
+    if (c.repetitions === 0) return 'new';
+    if (c.repetitions < 3 || c.easeFactor < 2.0) return 'learning';
+    if (c.repetitions < 6) return 'reviewing';
+    return 'mastered';
+  },
+
+  getStats(userId, lang) {
+    const all = Vocab.getAll(lang);
+    let newW = 0, learning = 0, reviewing = 0, mastered = 0;
+    all.forEach(v => {
+      const m = this.getMastery(userId, v.id);
+      if (m === 'new') newW++;
+      else if (m === 'learning') learning++;
+      else if (m === 'reviewing') reviewing++;
+      else mastered++;
+    });
+    return { new: newW, learning, reviewing, mastered, total: all.length };
+  },
+};
+
+/* ─── GAMIFICATION ──────────────────────────────────────────────────────── */
+const LEVELS = [
+  { level:1, name:'Seedling',   minXP:0,    maxXP:100,  emoji:'🌱' },
+  { level:2, name:'Explorer',   minXP:100,  maxXP:250,  emoji:'🧭' },
+  { level:3, name:'Student',    minXP:250,  maxXP:500,  emoji:'📚' },
+  { level:4, name:'Scholar',    minXP:500,  maxXP:900,  emoji:'🎓' },
+  { level:5, name:'Linguist',   minXP:900,  maxXP:1500, emoji:'🗣️' },
+  { level:6, name:'Polyglot',   minXP:1500, maxXP:2500, emoji:'🌍' },
+  { level:7, name:'Master',     minXP:2500, maxXP:4000, emoji:'🏆' },
+  { level:8, name:'Legend',     minXP:4000, maxXP:Infinity, emoji:'⚡' },
+];
+
+const XP_REWARDS = {
+  flashcard_again:   2,
+  flashcard_hard:    5,
+  flashcard_good:   10,
+  flashcard_easy:   15,
+  quiz_correct:     20,
+  quiz_perfect:     50,  // bonus for 100%
+  quiz_complete:    10,  // just finishing
+  daily_goal:       30,  // completing daily goal
+  streak_7:         100,
+  streak_30:        500,
+};
+
+const ACHIEVEMENTS = [
+  { id:'first_card',    name:'First Flip',      desc:'Study your first flashcard',    emoji:'🃏', xp:10,  condition: s => s.totalCardsStudied >= 1 },
+  { id:'ten_cards',     name:'Getting Started',  desc:'Study 10 flashcards',           emoji:'📖', xp:25,  condition: s => s.totalCardsStudied >= 10 },
+  { id:'hundred_cards', name:'Dedicated',         desc:'Study 100 flashcards',          emoji:'💪', xp:100, condition: s => s.totalCardsStudied >= 100 },
+  { id:'first_quiz',    name:'Quiz Taker',        desc:'Complete your first quiz',       emoji:'⚡', xp:15,  condition: s => s.totalQuizzes >= 1 },
+  { id:'perfect_quiz',  name:'Perfectionist',     desc:'Score 100% on a quiz',          emoji:'💯', xp:50,  condition: s => s.perfectQuizzes >= 1 },
+  { id:'streak_3',      name:'On Fire',           desc:'3-day streak',                  emoji:'🔥', xp:30,  condition: s => s.streak >= 3 },
+  { id:'streak_7',      name:'Week Warrior',      desc:'7-day streak',                  emoji:'🗓️', xp:100, condition: s => s.streak >= 7 },
+  { id:'streak_30',     name:'Monthly Legend',    desc:'30-day streak',                 emoji:'🏅', xp:500, condition: s => s.streak >= 30 },
+  { id:'first_master',  name:'Word Master',       desc:'Fully master a word',            emoji:'🌟', xp:20,  condition: s => s.masteredWords >= 1 },
+  { id:'ten_master',    name:'Vocabulary Builder', desc:'Master 10 words',              emoji:'📚', xp:75,  condition: s => s.masteredWords >= 10 },
+  { id:'polyglot',      name:'Polyglot',          desc:'Study in 3 different languages',emoji:'🌍', xp:200, condition: s => (s.languagesStudied||[]).length >= 3 },
+];
+
+const Gamification = {
+  _statsKey(userId) { return `gstats_${userId}`; },
+
+  getStats(userId) {
+    return Store.get(this._statsKey(userId), {
+      xp: 0, streak: 0, lastActivityDate: null,
+      totalCardsStudied: 0, totalQuizzes: 0, perfectQuizzes: 0,
+      masteredWords: 0, languagesStudied: [], achievements: [],
+      dailyXP: 0, lastDailyReset: null, quizHistory: [],
+    });
+  },
+
+  saveStats(userId, stats) {
+    Store.set(this._statsKey(userId), stats);
+  },
+
+  addXP(userId, amount, reason) {
+    const stats = this.getStats(userId);
+    stats.xp += amount;
+    this.saveStats(userId, stats);
+    return stats.xp;
+  },
+
+  getLevel(xp) {
+    return LEVELS.slice().reverse().find(l => xp >= l.minXP) || LEVELS[0];
+  },
+
+  updateStreak(userId) {
+    const stats = this.getStats(userId);
+    const today = new Date().toDateString();
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    if (stats.lastActivityDate === today) return stats.streak;
+    stats.streak = (stats.lastActivityDate === yesterday) ? stats.streak + 1 : 1;
+    stats.lastActivityDate = today;
+    // Reset daily XP if new day
+    if (stats.lastDailyReset !== today) {
+      stats.dailyXP = 0;
+      stats.lastDailyReset = today;
+    }
+    this.saveStats(userId, stats);
+    return stats.streak;
+  },
+
+  recordActivity(userId, type, data = {}) {
+    const stats = this.getStats(userId);
+    const xpReward = XP_REWARDS[type] || 0;
+    stats.xp += xpReward;
+    stats.dailyXP = (stats.dailyXP || 0) + xpReward;
+
+    if (type.startsWith('flashcard')) stats.totalCardsStudied++;
+    if (type === 'quiz_complete') {
+      stats.totalQuizzes++;
+      stats.quizHistory = [{ ...data, ts: Date.now() }, ...(stats.quizHistory || [])].slice(0, 50);
+    }
+    if (type === 'quiz_perfect') stats.perfectQuizzes = (stats.perfectQuizzes || 0) + 1;
+
+    if (data.lang && !(stats.languagesStudied || []).includes(data.lang)) {
+      stats.languagesStudied = [...(stats.languagesStudied || []), data.lang];
+    }
+
+    this.saveStats(userId, stats);
+    this.updateStreak(userId);
+
+    // Recalculate mastered words
+    const user = Auth.current();
+    if (user) {
+      const lang = user.settings.learningLang || 'es';
+      const srsStats = SRS.getStats(userId, lang);
+      stats.masteredWords = srsStats.mastered;
+      this.saveStats(userId, stats);
+    }
+
+    // Check achievements
+    const newAchievements = this.checkAchievements(userId);
+    return { xpReward, newAchievements };
+  },
+
+  checkAchievements(userId) {
+    const stats = this.getStats(userId);
+    const earned = stats.achievements || [];
+    const newlyEarned = [];
+    ACHIEVEMENTS.forEach(a => {
+      if (!earned.includes(a.id) && a.condition(stats)) {
+        earned.push(a.id);
+        stats.xp += a.xp;
+        newlyEarned.push(a);
+      }
+    });
+    stats.achievements = earned;
+    this.saveStats(userId, stats);
+    return newlyEarned;
+  },
+
+  getAchievements(userId) {
+    const stats = this.getStats(userId);
+    const earned = stats.achievements || [];
+    return ACHIEVEMENTS.map(a => ({ ...a, earned: earned.includes(a.id) }));
+  },
+};
+
+/* ─── QUIZ ENGINE ───────────────────────────────────────────────────────── */
+const QuizEngine = {
+  generateMCQ(word, allWords, targetLang) {
+    const correct = Vocab.getTranslation(word, targetLang);
+    const distractors = allWords
+      .filter(w => w.id !== word.id)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 3)
+      .map(w => Vocab.getTranslation(w, targetLang));
+    const options = [...distractors, correct].sort(() => Math.random() - 0.5);
+    return { word, correct, options, type: 'mcq' };
+  },
+
+  generateFillBlank(word, targetLang) {
+    const translation = Vocab.getTranslation(word, targetLang);
+    const example = word.example?.en || `Translate: ${word.word}`;
+    return { word, correct: translation, prompt: example, type: 'fill' };
+  },
+
+  generateMatch(words, targetLang, count = 4) {
+    const selected = words.sort(() => Math.random() - 0.5).slice(0, count);
+    const pairs = selected.map(w => ({
+      id: w.id, left: w.word,
+      right: Vocab.getTranslation(w, targetLang),
+    }));
+    return { pairs, shuffledRight: [...pairs].sort(() => Math.random() - 0.5).map(p => p.right), type: 'match' };
+  },
+
+  buildSession(lang, targetLang, options = {}) {
+    const { cat = null, difficulty = null, count = 10, modes = ['mcq'] } = options;
+    let pool = Vocab.getAll(lang);
+    if (cat) pool = pool.filter(v => v.category === cat);
+    if (difficulty) pool = pool.filter(v => v.difficulty === difficulty);
+    pool = pool.sort(() => Math.random() - 0.5).slice(0, count);
+
+    return pool.map((word, i) => {
+      const mode = modes[i % modes.length];
+      if (mode === 'mcq') return this.generateMCQ(word, Vocab.getAll(lang), targetLang);
+      if (mode === 'fill') return this.generateFillBlank(word, targetLang);
+      return this.generateMCQ(word, Vocab.getAll(lang), targetLang);
+    });
+  },
+};
+
+/* ─── TOAST SYSTEM ──────────────────────────────────────────────────────── */
+const Toast = {
+  show(msg, type = 'info', duration = 2500) {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'toast-container';
+      document.body.appendChild(container);
+    }
+    const t = document.createElement('div');
+    t.className = `toast toast-${type}`;
+    t.innerHTML = msg;
+    container.appendChild(t);
+    requestAnimationFrame(() => t.classList.add('show'));
+    setTimeout(() => {
+      t.classList.remove('show');
+      setTimeout(() => t.remove(), 400);
+    }, duration);
+  },
+  success: (m) => Toast.show(m, 'success'),
+  error:   (m) => Toast.show(m, 'error'),
+  info:    (m) => Toast.show(m, 'info'),
+  xp:      (amount) => Toast.show(`+${amount} XP ⚡`, 'xp'),
+};
+
+/* ─── ROUTER ────────────────────────────────────────────────────────────── */
+const Router = {
+  go(page) { window.location.href = page; },
+  requireAuth() {
+    if (!Auth.current()) { this.go('auth.html'); return false; }
+    return true;
+  },
+};
+
+/* ─── EXPOSE GLOBALS ────────────────────────────────────────────────────── */
+Object.assign(window, {
+  Store, Auth, LANGUAGES, VOCAB_DB, CATEGORIES_META, Vocab,
+  SRS, LEVELS, XP_REWARDS, ACHIEVEMENTS, Gamification,
+  QuizEngine, Toast, Router,
+});
+
+</script>
+<script>
+  // Redirect if already logged in
+  if (Auth.current()) Router.go('index.html');
+
+  let signupData = { nativeLang: 'en', learningLang: 'es', dailyGoal: 10 };
+
+  function switchTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach((t,i) =>
+      t.classList.toggle('active', (i === 0) === (tab === 'login'))
+    );
+    document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+    document.getElementById('signupForm').classList.toggle('hidden', tab !== 'signup');
+    if (tab === 'signup') buildLangGrids();
+  }
+
+  function buildLangGrids() {
+    const langs = Object.entries(LANGUAGES);
+    ['nativeLangGrid','learningLangGrid'].forEach((id, isLearning) => {
+      const grid = document.getElementById(id);
+      grid.innerHTML = '';
+      langs.forEach(([code, lang]) => {
+        const btn = document.createElement('button');
+        btn.className = 'lang-option' + (code === (isLearning ? 'es' : 'en') ? ' selected' : '');
+        btn.dataset.code = code;
+        btn.innerHTML = `${lang.flag} ${lang.name}`;
+        btn.onclick = () => {
+          grid.querySelectorAll('.lang-option').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          if (isLearning) signupData.learningLang = code;
+          else signupData.nativeLang = code;
+        };
+        grid.appendChild(btn);
+      });
+    });
+  }
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg; el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 4000);
+  }
+
+  function doLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPass').value;
+    const r = Auth.login(email, pass);
+    if (!r.ok) { showError('loginError', r.error); return; }
+    Router.go('index.html');
+  }
+
+  document.getElementById('loginPass').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  function doGuest() {
+    Auth.guest();
+    Router.go('index.html');
+  }
+
+  function signupStep2() {
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const pass = document.getElementById('signupPass').value;
+    if (!name || !email || pass.length < 6) {
+      showError('signupError', 'Please fill all fields. Password min 6 chars.'); return;
+    }
+    signupData = { ...signupData, name, email, pass };
+    document.getElementById('signupStep1').style.display = 'none';
+    document.getElementById('signupStep2').style.display = 'block';
+    document.getElementById('sd1').classList.replace('active','done');
+    document.getElementById('sd2').classList.add('active');
+  }
+
+  function signupStep3() {
+    document.getElementById('signupStep2').style.display = 'none';
+    document.getElementById('signupStep3').style.display = 'block';
+    document.getElementById('sd2').classList.replace('active','done');
+    document.getElementById('sd3').classList.add('active');
+  }
+
+  function selectGoal(btn) {
+    document.querySelectorAll('#goalGrid .lang-option').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    signupData.dailyGoal = parseInt(btn.dataset.goal);
+  }
+
+  function doSignup() {
+    const btn = document.getElementById('signupBtn');
+    btn.textContent = 'Creating account…'; btn.disabled = true;
+    const r = Auth.signup(signupData.name, signupData.email, signupData.pass);
+    if (!r.ok) { btn.textContent = '🚀 Start Learning!'; btn.disabled = false; return; }
+    Auth.updateSettings({ nativeLang: signupData.nativeLang, learningLang: signupData.learningLang, dailyGoal: signupData.dailyGoal });
+    Router.go('index.html');
+  }
+</script>
+</body>
+</html>
